@@ -1,0 +1,30 @@
+services:
+  # Flask Backend
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./server:/app
+    restart: unless-stopped
+
+  # React Frontend (Development)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    depends_on:
+      - server
+    restart: unless-stopped
