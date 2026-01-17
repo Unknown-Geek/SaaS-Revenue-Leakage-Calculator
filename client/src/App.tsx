@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Analytics } from "@vercel/analytics/react"
 import { CalculatorForm, type CalculatorFormData } from '@/components/CalculatorForm'
 import { ResultsDisplay } from '@/components/ResultsDisplay'
 
@@ -78,6 +79,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Analytics />
     </div>
   )
 }
