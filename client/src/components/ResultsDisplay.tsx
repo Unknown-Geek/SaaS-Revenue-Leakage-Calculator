@@ -51,7 +51,7 @@ const cardVariants = {
         y: 0,
         transition: {
             duration: 0.5,
-            ease: 'easeOut',
+            ease: 'easeOut' as const,
         },
     },
 }
@@ -169,10 +169,8 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
             <div className="grid grid-cols-2 gap-4">
                 {/* Net Revenue Card */}
                 <motion.div
-                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden cursor-pointer
-                     transition-transform duration-200 hover:scale-[1.02]"
+                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden"
                     variants={cardVariants}
-                    whileHover={{ y: -2 }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
                     <div className="relative">
@@ -190,10 +188,8 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
 
                 {/* Total Leakage Card */}
                 <motion.div
-                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden cursor-pointer
-                     transition-transform duration-200 hover:scale-[1.02]"
+                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden"
                     variants={cardVariants}
-                    whileHover={{ y: -2 }}
                 >
                     {/* Red glow effect for alarming feel */}
                     <div className="absolute inset-0 bg-gradient-to-br from-rose-100/60 to-transparent pointer-events-none" />
@@ -212,68 +208,41 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                 </motion.div>
             </div>
 
-            {/* Premium Savings CTA Section */}
+            {/* Savings CTA Section */}
             <motion.div
-                className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 relative overflow-hidden
-                   transition-transform duration-200 hover:scale-[1.02]"
+                className="bg-white p-8 rounded-2xl shadow-lg shadow-slate-200/50"
                 variants={cardVariants}
-                whileHover={{ y: -2 }}
             >
-                {/* Subtle decorative elements */}
-                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl pointer-events-none" />
-
-                <div className="relative">
-                    <div className="flex items-start justify-between mb-6">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                                Your Monthly Savings
-                            </p>
-                            <div className="flex items-center gap-3">
-                                {/* Spark/Checkmark Icon */}
-                                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                                {/* Premium serif font for savings number */}
-                                <p className="text-5xl font-bold tracking-tight text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>
-                                    $<CountUp end={data.savings.total} duration={1.2} separator="," preserveValue />
-                                </p>
-                            </div>
-                        </div>
-                        <div className="text-right">
-                            <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-sm font-semibold">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                                <CountUp end={data.savings.percentage} duration={1} decimals={1} preserveValue />% less
-                            </div>
-                        </div>
-                    </div>
-
-                    <p className="text-slate-600 mb-6">
-                        Switch to Paaaid and save <span className="font-semibold text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>$<CountUp end={data.savings.annual} duration={1.5} separator="," preserveValue /></span> annually.
-                        That's money back in your business.
+                <div className="flex items-center justify-between mb-6">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Your Monthly Savings
                     </p>
-
-                    {/* Pill-shaped CTA Button */}
-                    <motion.button
-                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-4 px-8 rounded-full 
-                       transition-all duration-200 
-                       hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30
-                       active:translate-y-0 active:shadow-md"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        Get Started with Paaaid
-                    </motion.button>
+                    <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-sm font-medium">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                        <CountUp end={data.savings.percentage} duration={1} decimals={1} preserveValue />%
+                    </div>
                 </div>
+
+                <p className="text-5xl font-bold tracking-tight text-slate-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    $<CountUp end={data.savings.total} duration={1.2} separator="," preserveValue />
+                </p>
+
+                <p className="text-slate-500 text-sm mb-8">
+                    Save <span className="font-semibold text-slate-700">${data.savings.annual.toLocaleString()}</span> annually with Paaaid
+                </p>
+
+                <button
+                    className="w-full bg-[#00A8E8] hover:bg-[#0090C8] text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-200"
+                >
+                    Get Started with Paaaid
+                </button>
             </motion.div>
 
             {/* Chart Card */}
             <motion.div
-                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 transition-transform duration-200 hover:scale-[1.02]"
+                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50"
                 variants={cardVariants}
             >
                 <h3 className="text-sm font-semibold text-slate-900 mb-4">Cost Breakdown Comparison</h3>
@@ -306,7 +275,7 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
 
             {/* Comparison Table Card */}
             <motion.div
-                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 transition-transform duration-200 hover:scale-[1.02]"
+                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50"
                 variants={cardVariants}
             >
                 <h3 className="text-sm font-semibold text-slate-900 mb-4">Detailed Comparison</h3>
