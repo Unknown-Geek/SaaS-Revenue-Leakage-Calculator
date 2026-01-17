@@ -29,7 +29,7 @@ interface CalculationResult {
 
 function App() {
   const [result, setResult] = useState<CalculationResult | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [currentMrr, setCurrentMrr] = useState(10000)
 
   const handleCalculate = useCallback(async (formData: CalculatorFormData) => {
