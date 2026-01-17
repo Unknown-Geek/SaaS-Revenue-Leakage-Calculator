@@ -171,8 +171,8 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
                        [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
                        [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
                        [&_[role=slider]]:hover:scale-110
-                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
-                       [&_[data-orientation=horizontal]]:bg-blue-500"
+                       [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-slate-200 [&_[data-slot=slider-track]]:rounded-full
+                       [&_[data-slot=slider-range]]:bg-blue-500"
                     />
                 </motion.div>
 
@@ -195,8 +195,8 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
                        [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
                        [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
                        [&_[role=slider]]:hover:scale-110
-                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
-                       [&_[data-orientation=horizontal]]:bg-blue-500"
+                       [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-slate-200 [&_[data-slot=slider-track]]:rounded-full
+                       [&_[data-slot=slider-range]]:bg-blue-500"
                     />
                 </motion.div>
 
@@ -219,8 +219,8 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
                        [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
                        [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
                        [&_[role=slider]]:hover:scale-110
-                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
-                       [&_[data-orientation=horizontal]]:bg-blue-500"
+                       [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-slate-200 [&_[data-slot=slider-track]]:rounded-full
+                       [&_[data-slot=slider-range]]:bg-blue-500"
                     />
                 </motion.div>
 
