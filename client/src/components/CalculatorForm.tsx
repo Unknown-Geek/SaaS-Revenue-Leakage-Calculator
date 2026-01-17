@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Slider } from '@/components/ui/slider'
 
 export interface CalculatorFormData {
     mrr: number
@@ -21,9 +21,9 @@ interface CalculatorFormProps {
 export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
     const [mrr, setMrr] = useState<string>('10000')
     const [processor, setProcessor] = useState<string>('stripe')
-    const [internationalPercent, setInternationalPercent] = useState<string>('30')
-    const [euPercent, setEuPercent] = useState<string>('20')
-    const [failedPaymentRate, setFailedPaymentRate] = useState<string>('5')
+    const [internationalPercent, setInternationalPercent] = useState<number>(30)
+    const [euPercent, setEuPercent] = useState<number>(20)
+    const [failedPaymentRate, setFailedPaymentRate] = useState<number>(5)
 
     // Debounced auto-calculate
     useEffect(() => {
@@ -31,12 +31,11 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
             const formData: CalculatorFormData = {
                 mrr: parseFloat(mrr) || 0,
                 processor,
-                international_percent: parseFloat(internationalPercent) || 0,
-                eu_percent: parseFloat(euPercent) || 0,
-                failed_payment_rate: parseFloat(failedPaymentRate) || 0,
+                international_percent: internationalPercent,
+                eu_percent: euPercent,
+                failed_payment_rate: failedPaymentRate,
             }
 
-            // Only calculate if MRR is valid
             if (formData.mrr > 0) {
                 onCalculate(formData)
             }
@@ -49,103 +48,169 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
         const formData: CalculatorFormData = {
             mrr: parseFloat(mrr) || 0,
             processor,
-            international_percent: parseFloat(internationalPercent) || 0,
-            eu_percent: parseFloat(euPercent) || 0,
-            failed_payment_rate: parseFloat(failedPaymentRate) || 0,
+            international_percent: internationalPercent,
+            eu_percent: euPercent,
+            failed_payment_rate: failedPaymentRate,
         }
         onCalculate(formData)
     }, [mrr, processor, internationalPercent, euPercent, failedPaymentRate, onCalculate])
 
     return (
-        <Card className="bg-white border-slate-100 shadow-sm rounded-2xl">
-            <CardHeader>
-                <CardTitle className="text-slate-900">Your Business Details</CardTitle>
-                <CardDescription className="text-slate-500">
+        <div className="bg-white p-8 rounded-2xl shadow-lg shadow-slate-200/50">
+            {/* Header */}
+            <div className="mb-8">
+                <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
+                    Your Business Details
+                </h2>
+                <p className="text-sm text-slate-500 mt-1">
                     Enter your current metrics to calculate potential savings
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+                </p>
+            </div>
+
+            <div className="space-y-6">
+                {/* MRR Input */}
                 <div className="space-y-2">
-                    <Label htmlFor="mrr" className="text-slate-700 font-medium">
-                        Monthly Recurring Revenue ($)
+                    <Label
+                        htmlFor="mrr"
+                        className="text-xs font-semibold uppercase tracking-wider text-slate-400"
+                    >
+                        Monthly Recurring Revenue
                     </Label>
-                    <Input
-                        id="mrr"
-                        type="number"
-                        value={mrr}
-                        onChange={(e) => setMrr(e.target.value)}
-                        className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-paaaid focus:ring-paaaid"
-                        placeholder="10000"
-                    />
+                    <div className="relative">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
+                        <Input
+                            id="mrr"
+                            type="number"
+                            value={mrr}
+                            onChange={(e) => setMrr(e.target.value)}
+                            className="pl-8 h-12 bg-slate-50 border-transparent text-slate-900 font-medium rounded-xl 
+                         transition-all duration-200 
+                         focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-transparent
+                         placeholder:text-slate-400"
+                            placeholder="10000"
+                        />
+                    </div>
                 </div>
 
+                {/* Processor Select */}
                 <div className="space-y-2">
-                    <Label htmlFor="processor" className="text-slate-700 font-medium">
+                    <Label
+                        htmlFor="processor"
+                        className="text-xs font-semibold uppercase tracking-wider text-slate-400"
+                    >
                         Payment Processor
                     </Label>
                     <Select value={processor} onValueChange={setProcessor}>
-                        <SelectTrigger className="bg-white border-slate-200 text-slate-900 rounded-xl focus:border-paaaid focus:ring-paaaid">
+                        <SelectTrigger
+                            className="h-12 bg-slate-50 border-transparent text-slate-900 font-medium rounded-xl 
+                         transition-all duration-200
+                         focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-transparent"
+                        >
                             <SelectValue placeholder="Select processor" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl">
-                            <SelectItem value="stripe">Stripe</SelectItem>
-                            <SelectItem value="paypal">PayPal</SelectItem>
-                            <SelectItem value="paddle">Paddle</SelectItem>
-                            <SelectItem value="lemon">Lemon Squeezy</SelectItem>
+                        <SelectContent className="rounded-xl border-slate-100 shadow-lg">
+                            <SelectItem value="stripe" className="rounded-lg">Stripe</SelectItem>
+                            <SelectItem value="paypal" className="rounded-lg">PayPal</SelectItem>
+                            <SelectItem value="paddle" className="rounded-lg">Paddle</SelectItem>
+                            <SelectItem value="lemon" className="rounded-lg">Lemon Squeezy</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="international" className="text-slate-700 font-medium">
-                        International Transactions (%)
-                    </Label>
-                    <Input
-                        id="international"
-                        type="number"
-                        value={internationalPercent}
-                        onChange={(e) => setInternationalPercent(e.target.value)}
-                        className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-paaaid focus:ring-paaaid"
-                        placeholder="30"
+                {/* International Transactions Slider */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            International Transactions
+                        </Label>
+                        <span className="text-sm font-semibold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg">
+                            {internationalPercent}%
+                        </span>
+                    </div>
+                    <Slider
+                        value={[internationalPercent]}
+                        onValueChange={(value) => setInternationalPercent(value[0])}
+                        max={100}
+                        step={1}
+                        className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:bg-white 
+                       [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
+                       [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
+                       [&_[role=slider]]:hover:scale-110
+                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
+                       [&_[data-orientation=horizontal]]:bg-blue-500"
                     />
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="eu" className="text-slate-700 font-medium">
-                        EU Customers (%)
-                    </Label>
-                    <Input
-                        id="eu"
-                        type="number"
-                        value={euPercent}
-                        onChange={(e) => setEuPercent(e.target.value)}
-                        className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-paaaid focus:ring-paaaid"
-                        placeholder="20"
+                {/* EU Customers Slider */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            EU Customers
+                        </Label>
+                        <span className="text-sm font-semibold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg">
+                            {euPercent}%
+                        </span>
+                    </div>
+                    <Slider
+                        value={[euPercent]}
+                        onValueChange={(value) => setEuPercent(value[0])}
+                        max={100}
+                        step={1}
+                        className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:bg-white 
+                       [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
+                       [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
+                       [&_[role=slider]]:hover:scale-110
+                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
+                       [&_[data-orientation=horizontal]]:bg-blue-500"
                     />
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="failed" className="text-slate-700 font-medium">
-                        Failed Payment Rate (%)
-                    </Label>
-                    <Input
-                        id="failed"
-                        type="number"
-                        value={failedPaymentRate}
-                        onChange={(e) => setFailedPaymentRate(e.target.value)}
-                        className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-paaaid focus:ring-paaaid"
-                        placeholder="5"
+                {/* Failed Payment Rate Slider */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            Failed Payment Rate
+                        </Label>
+                        <span className="text-sm font-semibold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg">
+                            {failedPaymentRate}%
+                        </span>
+                    </div>
+                    <Slider
+                        value={[failedPaymentRate]}
+                        onValueChange={(value) => setFailedPaymentRate(value[0])}
+                        max={20}
+                        step={0.5}
+                        className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:bg-white 
+                       [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 
+                       [&_[role=slider]]:shadow-md [&_[role=slider]]:transition-all [&_[role=slider]]:duration-200
+                       [&_[role=slider]]:hover:scale-110
+                       [&_.relative]:h-2 [&_.relative]:bg-slate-100 [&_.relative]:rounded-full
+                       [&_[data-orientation=horizontal]]:bg-blue-500"
                     />
                 </div>
 
+                {/* Calculate Button */}
                 <Button
                     onClick={handleManualCalculate}
                     disabled={loading}
-                    className="w-full bg-paaaid hover:bg-[#0088BC] text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                    className="w-full h-12 bg-paaaid hover:bg-[#0088BC] text-white font-semibold rounded-xl 
+                     transition-all duration-200 shadow-lg shadow-blue-500/25 
+                     hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5
+                     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
-                    {loading ? 'Calculating...' : 'Calculate Savings'}
+                    {loading ? (
+                        <span className="flex items-center gap-2">
+                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Calculating...
+                        </span>
+                    ) : (
+                        'Calculate Savings'
+                    )}
                 </Button>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     )
 }

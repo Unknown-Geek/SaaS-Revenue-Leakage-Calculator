@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CalculatorForm, type CalculatorFormData } from '@/components/CalculatorForm'
 
 interface CalculationResult {
@@ -67,7 +67,7 @@ function App() {
           <CalculatorForm onCalculate={handleCalculate} loading={loading} />
 
           {/* Right Column - Results */}
-          <Card className="bg-white border-slate-100 shadow-sm rounded-2xl">
+          <div className="bg-white p-8 rounded-2xl shadow-lg shadow-slate-200/50">
             <CardHeader>
               <CardTitle className="text-slate-900">Your Potential Savings</CardTitle>
               <CardDescription className="text-slate-500">
@@ -130,7 +130,7 @@ function App() {
                 </div>
               )}
             </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
