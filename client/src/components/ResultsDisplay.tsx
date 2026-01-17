@@ -115,25 +115,54 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                 </div>
             </div>
 
-            {/* Savings Summary Card */}
-            <div className="bg-gradient-to-r from-[#00A8E8] to-[#0088BC] p-6 rounded-2xl shadow-lg shadow-blue-500/25 text-white">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-white/70 mb-1">
-                            Monthly Savings with Paaaid
-                        </p>
-                        <p className="text-3xl font-bold tracking-tighter">
-                            ${data.savings.total.toLocaleString()}
-                        </p>
+            {/* Premium Savings CTA Section */}
+            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 relative overflow-hidden">
+                {/* Subtle decorative elements */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl pointer-events-none" />
+
+                <div className="relative">
+                    <div className="flex items-start justify-between mb-6">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                                Your Monthly Savings
+                            </p>
+                            <div className="flex items-center gap-3">
+                                {/* Spark/Checkmark Icon */}
+                                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                {/* Premium serif font for savings number */}
+                                <p className="text-5xl font-bold tracking-tight text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>
+                                    ${data.savings.total.toLocaleString()}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-sm font-semibold">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                                {data.savings.percentage}% less
+                            </div>
+                        </div>
                     </div>
-                    <div className="text-right">
-                        <p className="text-2xl font-bold">{data.savings.percentage}%</p>
-                        <p className="text-xs text-white/70">reduction</p>
-                    </div>
+
+                    <p className="text-slate-600 mb-6">
+                        Switch to Paaaid and save <span className="font-semibold text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>${data.savings.annual.toLocaleString()}</span> annually.
+                        That's money back in your business.
+                    </p>
+
+                    {/* Pill-shaped CTA Button */}
+                    <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-4 px-8 rounded-full 
+                                     transition-all duration-200 
+                                     hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30
+                                     active:translate-y-0 active:shadow-md">
+                        Get Started with Paaaid
+                    </button>
                 </div>
-                <p className="text-sm text-white/80 mt-3 pt-3 border-t border-white/20">
-                    That's <span className="font-semibold text-white">${data.savings.annual.toLocaleString()}</span> saved annually
-                </p>
             </div>
 
             {/* Chart Card */}
