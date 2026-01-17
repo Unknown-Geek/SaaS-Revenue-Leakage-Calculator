@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import CountUp from 'react-countup'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { Loader } from './Loader'
 
 interface ResultsData {
     current: {
@@ -69,57 +70,23 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
     return null
 }
 
-// Skeleton Loader Component
-function SkeletonLoader() {
+// Loading Component
+function LoadingState() {
     return (
         <motion.div
-            className="space-y-4"
+            className="flex items-center justify-center py-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
-            {/* Top Cards Skeleton */}
-            <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
-                    <div className="animate-pulse space-y-3">
-                        <div className="h-3 w-24 bg-slate-200 rounded" />
-                        <div className="h-10 w-32 bg-slate-200 rounded" />
-                        <div className="h-3 w-20 bg-slate-100 rounded" />
-                    </div>
-                </div>
-                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
-                    <div className="animate-pulse space-y-3">
-                        <div className="h-3 w-24 bg-slate-200 rounded" />
-                        <div className="h-10 w-32 bg-slate-200 rounded" />
-                        <div className="h-3 w-20 bg-slate-100 rounded" />
-                    </div>
-                </div>
-            </div>
-
-            {/* CTA Skeleton */}
-            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100">
-                <div className="animate-pulse space-y-4">
-                    <div className="h-3 w-32 bg-slate-200 rounded" />
-                    <div className="h-12 w-48 bg-slate-200 rounded" />
-                    <div className="h-4 w-64 bg-slate-100 rounded" />
-                    <div className="h-12 w-full bg-blue-200 rounded-full" />
-                </div>
-            </div>
-
-            {/* Chart Skeleton */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
-                <div className="animate-pulse">
-                    <div className="h-4 w-40 bg-slate-200 rounded mb-4" />
-                    <div className="h-48 bg-slate-100 rounded" />
-                </div>
-            </div>
+            <Loader />
         </motion.div>
     )
 }
 
 export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
     if (loading && !data) {
-        return <SkeletonLoader />
+        return <LoadingState />
     }
 
     if (!data) {
