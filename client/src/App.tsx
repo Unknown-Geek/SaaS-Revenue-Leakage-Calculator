@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CalculatorForm, CalculatorFormData } from '@/components/CalculatorForm'
+import { CalculatorForm, type CalculatorFormData } from '@/components/CalculatorForm'
 
 interface CalculationResult {
   success: boolean
