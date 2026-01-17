@@ -85,7 +85,7 @@ function LoadingState() {
 }
 
 export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
-    if (loading && !data) {
+    if (loading) {
         return <LoadingState />
     }
 
