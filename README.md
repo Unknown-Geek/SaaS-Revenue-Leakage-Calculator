@@ -1,10 +1,24 @@
 # SaaS Revenue Leakage Calculator
 
-A tool to calculate and visualize revenue leakage for SaaS businesses, comparing current payment processor costs with Paaaid's optimized rates.
+A full-stack tool to calculate and visualize revenue leakage for SaaS businesses, comparing current payment processor costs with Paaaid's optimized rates.
+
+![SaaS Calculator Preview](client/public/calculator.png)
 
 ## 🚀 Quick Start
 
-### Backend (Flask API)
+### Option 1: Docker (Recommended)
+
+Run the entire stack with a single command:
+
+```bash
+docker-compose up --build
+```
+
+Access the app at `http://localhost:5173`.
+
+### Option 2: Manual Setup
+
+#### Backend (Flask API)
 
 ```bash
 cd server
@@ -13,8 +27,36 @@ source venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
+Runs on `http://localhost:5000`.
 
-The API will run on `http://localhost:5000`.
+#### Frontend (React + Vite)
+
+```bash
+cd client
+npm install
+npm run dev
+```
+Runs on `http://localhost:5173`.
+
+## 🛠 Tech Stack
+
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, Shadcn UI
+- **Visualization**: Recharts, Framer Motion
+- **Backend**: Flask, Gunicorn
+- **Deployment**: Docker, Vercel (Frontend), Render (Backend)
+- **Analytics**: Vercel Analytics
+
+## 🚢 Deployment
+
+### 1. Backend (Render)
+- Deploy the `server` directory.
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `gunicorn app:app`
+
+### 2. Frontend (Vercel)
+- Deploy the `client` directory.
+- **Rewrites**: Configured in `vercel.json` to proxy `/api` calls to the deployed backend.
+- **Environment**: No env vars needed for routing, handled by rewrites.
 
 ## 📡 API Reference
 
@@ -22,7 +64,7 @@ The API will run on `http://localhost:5000`.
 
 Calculate revenue leakage and potential savings.
 
-#### Request Body
+**Request Body:**
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -31,49 +73,6 @@ Calculate revenue leakage and potential savings.
 | `international_percent` | float | Percentage of international transactions (0-100) |
 | `eu_percent` | float | Percentage of EU customers (0-100) |
 | `failed_payment_rate` | float | Current failed payment rate (0-100) |
-
-#### Example Request
-
-```bash
-curl -X POST http://localhost:5000/api/calculate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "mrr": 10000,
-    "processor": "stripe",
-    "international_percent": 30,
-    "eu_percent": 20,
-    "failed_payment_rate": 5
-  }'
-```
-
-#### Example Response
-
-```json
-{
-  "success": true,
-  "current": {
-    "payment_fees": 450.0,
-    "fx_fees": 60.0,
-    "failed_payments": 500.0,
-    "tax_overhead": 10.0,
-    "chargebacks": 30.0,
-    "total": 1050.0
-  },
-  "paaaid": {
-    "payment_fees": 300.0,
-    "fx_fees": 15.0,
-    "failed_payments": 400.0,
-    "tax_overhead": 0,
-    "chargebacks": 30.0,
-    "total": 745.0
-  },
-  "savings": {
-    "total": 305.0,
-    "percentage": 29.05,
-    "annual": 3660.0
-  }
-}
-```
 
 ## 💰 Calculation Formulas
 
@@ -96,21 +95,6 @@ curl -X POST http://localhost:5000/api/calculate \
 | **Failed Payments** | 20% reduction from current |
 | **Tax Overhead** | $0 (handled by Paaaid) |
 | **Chargebacks** | Same as current |
-
-## 🛠 Tech Stack
-
-- **Backend**: Flask, Flask-CORS
-- **Frontend**: Coming soon (Vite + React)
-
-## 📁 Project Structure
-
-```
-├── server/
-│   ├── app.py           # Flask API
-│   ├── requirements.txt # Python dependencies
-│   └── venv/            # Virtual environment
-└── README.md
-```
 
 ## 📝 License
 
