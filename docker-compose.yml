@@ -25,6 +25,7 @@ services:
       - /app/node_modules
     environment:
       - VITE_API_URL=http://localhost:5000
+      - API_TARGET=http://server:5000
     depends_on:
       - server
     restart: unless-stopped
