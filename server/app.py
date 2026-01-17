@@ -3,8 +3,8 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-# Enable CORS for frontend origins (local dev and Docker)
-CORS(app, origins=["http://localhost:5173", "http://client:5173", "http://localhost:80", "http://localhost"])
+# Enable CORS for frontend origins
+CORS(app, origins=["http://localhost:5173", "http://localhost:80", "http://localhost", "https://*.vercel.app"])
 
 # Processor base rates: (percentage, fixed fee)
 PROCESSOR_RATES = {
