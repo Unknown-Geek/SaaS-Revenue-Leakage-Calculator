@@ -1,9 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Increased border radius for modern feel */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -11,6 +15,12 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Paaaid Blue (#00A8E8) as primary */
+  --color-paaaid: #00A8E8;
+  --color-paaaid-light: #E6F7FC;
+  --color-paaaid-dark: #0088BC;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -45,79 +55,166 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Larger radius for friendly, modern feel (rounded-2xl = 1rem) */
+  --radius: 1rem;
+
+  /* Light theme - slate-50 background, white cards */
+  --background: #f8fafc;
+  /* slate-50 */
+  --foreground: #475569;
+  /* slate-600 - base text */
+  --card: #ffffff;
+  /* pure white */
+  --card-foreground: #475569;
+  /* slate-600 */
+  --popover: #ffffff;
+  --popover-foreground: #475569;
+
+  /* Paaaid Blue as primary */
+  --primary: #00A8E8;
+  /* Paaaid blue */
+  --primary-foreground: #ffffff;
+
+  /* Soft secondary */
+  --secondary: #f1f5f9;
+  /* slate-100 */
+  --secondary-foreground: #334155;
+  /* slate-700 */
+
+  /* Muted for subtle elements */
+  --muted: #f1f5f9;
+  /* slate-100 */
+  --muted-foreground: #64748b;
+  /* slate-500 */
+
+  /* Accent with Paaaid blue tint */
+  --accent: #E6F7FC;
+  /* light Paaaid blue */
+  --accent-foreground: #0088BC;
+  /* dark Paaaid blue */
+
+  --destructive: #ef4444;
+  /* red-500 */
+
+  /* Extremely subtle borders */
+  --border: #f1f5f9;
+  /* slate-100 */
+  --input: #e2e8f0;
+  /* slate-200 */
+  --ring: #00A8E8;
+  /* Paaaid blue for focus */
+
+  /* Chart colors */
+  --chart-1: #00A8E8;
+  --chart-2: #10b981;
+  --chart-3: #8b5cf6;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #475569;
+  --sidebar-primary: #00A8E8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #E6F7FC;
+  --sidebar-accent-foreground: #0088BC;
+  --sidebar-border: #f1f5f9;
+  --sidebar-ring: #00A8E8;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0f172a;
+  /* slate-900 */
+  --foreground: #e2e8f0;
+  /* slate-200 */
+  --card: #1e293b;
+  /* slate-800 */
+  --card-foreground: #e2e8f0;
+  --popover: #1e293b;
+  --popover-foreground: #e2e8f0;
+  --primary: #00A8E8;
+  --primary-foreground: #ffffff;
+  --secondary: #334155;
+  /* slate-700 */
+  --secondary-foreground: #e2e8f0;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  /* slate-400 */
+  --accent: #0c4a6e;
+  /* dark blue accent */
+  --accent-foreground: #7dd3fc;
+  --destructive: #f87171;
+  --border: #334155;
+  --input: #475569;
+  --ring: #00A8E8;
+  --chart-1: #38bdf8;
+  --chart-2: #34d399;
+  --chart-3: #a78bfa;
+  --chart-4: #fbbf24;
+  --chart-5: #f87171;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #00A8E8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0c4a6e;
+  --sidebar-accent-foreground: #7dd3fc;
+  --sidebar-border: #334155;
+  --sidebar-ring: #00A8E8;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-slate-900 tracking-tight font-semibold;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Utility classes for Paaaid brand */
+@layer utilities {
+  .text-paaaid {
+    color: #00A8E8;
+  }
+
+  .bg-paaaid {
+    background-color: #00A8E8;
+  }
+
+  .bg-paaaid-light {
+    background-color: #E6F7FC;
+  }
+
+  .border-paaaid {
+    border-color: #00A8E8;
+  }
+
+  /* Modern card with soft shadow */
+  .card-elevated {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm;
+  }
+
+  .card-elevated-md {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-md;
   }
 }
