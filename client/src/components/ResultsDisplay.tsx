@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+import CountUp from 'react-countup'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 
 interface ResultsData {
@@ -30,6 +32,30 @@ interface ResultsDisplayProps {
     mrr: number
 }
 
+// Animation variants for staggered fade-in from bottom
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2,
+        },
+    },
+}
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.5,
+            ease: 'easeOut',
+        },
+    },
+}
+
 // Custom tooltip component
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string }>; label?: string }) => {
     if (active && payload && payload.length) {
@@ -43,10 +69,66 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
     return null
 }
 
+// Skeleton Loader Component
+function SkeletonLoader() {
+    return (
+        <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
+            {/* Top Cards Skeleton */}
+            <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
+                    <div className="animate-pulse space-y-3">
+                        <div className="h-3 w-24 bg-slate-200 rounded" />
+                        <div className="h-10 w-32 bg-slate-200 rounded" />
+                        <div className="h-3 w-20 bg-slate-100 rounded" />
+                    </div>
+                </div>
+                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
+                    <div className="animate-pulse space-y-3">
+                        <div className="h-3 w-24 bg-slate-200 rounded" />
+                        <div className="h-10 w-32 bg-slate-200 rounded" />
+                        <div className="h-3 w-20 bg-slate-100 rounded" />
+                    </div>
+                </div>
+            </div>
+
+            {/* CTA Skeleton */}
+            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100">
+                <div className="animate-pulse space-y-4">
+                    <div className="h-3 w-32 bg-slate-200 rounded" />
+                    <div className="h-12 w-48 bg-slate-200 rounded" />
+                    <div className="h-4 w-64 bg-slate-100 rounded" />
+                    <div className="h-12 w-full bg-blue-200 rounded-full" />
+                </div>
+            </div>
+
+            {/* Chart Skeleton */}
+            <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
+                <div className="animate-pulse">
+                    <div className="h-4 w-40 bg-slate-200 rounded mb-4" />
+                    <div className="h-48 bg-slate-100 rounded" />
+                </div>
+            </div>
+        </motion.div>
+    )
+}
+
 export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
+    if (loading && !data) {
+        return <SkeletonLoader />
+    }
+
     if (!data) {
         return (
-            <div className="h-full flex items-center justify-center py-20">
+            <motion.div
+                className="h-full flex items-center justify-center py-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+            >
                 <div className="text-center">
                     <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <svg className="w-8 h-8 text-[#00A8E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,10 +136,10 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                         </svg>
                     </div>
                     <p className="text-slate-500">
-                        {loading ? 'Calculating...' : 'Enter your details to see your potential savings with Paaaid'}
+                        Enter your details to see your potential savings with Paaaid
                     </p>
                 </div>
-            </div>
+            </motion.div>
         )
     }
 
@@ -77,27 +159,42 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
     const barColors = ['#60a5fa', '#f87171', '#fbbf24', '#34d399', '#a78bfa']
 
     return (
-        <div className="space-y-4">
+        <motion.div
+            className="space-y-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             {/* Bento Grid - Top Metric Cards */}
             <div className="grid grid-cols-2 gap-4">
                 {/* Net Revenue Card */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden">
+                <motion.div
+                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden cursor-pointer
+                     transition-transform duration-200 hover:scale-[1.02]"
+                    variants={cardVariants}
+                    whileHover={{ y: -2 }}
+                >
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
                     <div className="relative">
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                             Net Revenue
                         </p>
                         <p className="text-4xl font-bold tracking-tighter text-emerald-600">
-                            ${netRevenue.toLocaleString()}
+                            $<CountUp end={netRevenue} duration={1} separator="," preserveValue />
                         </p>
                         <p className="text-xs text-slate-500 mt-2">
                             After Paaaid fees
                         </p>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Total Leakage Card */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden">
+                <motion.div
+                    className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden cursor-pointer
+                     transition-transform duration-200 hover:scale-[1.02]"
+                    variants={cardVariants}
+                    whileHover={{ y: -2 }}
+                >
                     {/* Red glow effect for alarming feel */}
                     <div className="absolute inset-0 bg-gradient-to-br from-rose-100/60 to-transparent pointer-events-none" />
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-rose-200/30 rounded-full blur-2xl pointer-events-none" />
@@ -106,17 +203,22 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                             Total Leakage
                         </p>
                         <p className="text-4xl font-bold tracking-tighter text-rose-500">
-                            ${totalLeakage.toLocaleString()}
+                            $<CountUp end={totalLeakage} duration={1} separator="," preserveValue />
                         </p>
                         <p className="text-xs text-rose-500/80 mt-2">
                             With current provider
                         </p>
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Premium Savings CTA Section */}
-            <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 relative overflow-hidden">
+            <motion.div
+                className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 relative overflow-hidden
+                   transition-transform duration-200 hover:scale-[1.02]"
+                variants={cardVariants}
+                whileHover={{ y: -2 }}
+            >
                 {/* Subtle decorative elements */}
                 <div className="absolute top-0 right-0 w-40 h-40 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl pointer-events-none" />
@@ -136,7 +238,7 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                                 </div>
                                 {/* Premium serif font for savings number */}
                                 <p className="text-5xl font-bold tracking-tight text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>
-                                    ${data.savings.total.toLocaleString()}
+                                    $<CountUp end={data.savings.total} duration={1.2} separator="," preserveValue />
                                 </p>
                             </div>
                         </div>
@@ -145,28 +247,35 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
-                                {data.savings.percentage}% less
+                                <CountUp end={data.savings.percentage} duration={1} decimals={1} preserveValue />% less
                             </div>
                         </div>
                     </div>
 
                     <p className="text-slate-600 mb-6">
-                        Switch to Paaaid and save <span className="font-semibold text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>${data.savings.annual.toLocaleString()}</span> annually.
+                        Switch to Paaaid and save <span className="font-semibold text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>$<CountUp end={data.savings.annual} duration={1.5} separator="," preserveValue /></span> annually.
                         That's money back in your business.
                     </p>
 
                     {/* Pill-shaped CTA Button */}
-                    <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-4 px-8 rounded-full 
-                                     transition-all duration-200 
-                                     hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30
-                                     active:translate-y-0 active:shadow-md">
+                    <motion.button
+                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-4 px-8 rounded-full 
+                       transition-all duration-200 
+                       hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30
+                       active:translate-y-0 active:shadow-md"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
                         Get Started with Paaaid
-                    </button>
+                    </motion.button>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Chart Card */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
+            <motion.div
+                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 transition-transform duration-200 hover:scale-[1.02]"
+                variants={cardVariants}
+            >
                 <h3 className="text-sm font-semibold text-slate-900 mb-4">Cost Breakdown Comparison</h3>
                 <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -193,10 +302,13 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                         <span className="w-3 h-3 rounded bg-amber-400/70" /> Failed
                     </span>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Comparison Table Card */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50">
+            <motion.div
+                className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 transition-transform duration-200 hover:scale-[1.02]"
+                variants={cardVariants}
+            >
                 <h3 className="text-sm font-semibold text-slate-900 mb-4">Detailed Comparison</h3>
                 <div className="space-y-3">
                     <div className="grid grid-cols-3 gap-4 text-xs font-semibold uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-100">
@@ -225,7 +337,7 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
                         <span className="text-center text-emerald-600">${data.paaaid.total.toLocaleString()}</span>
                     </div>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }
