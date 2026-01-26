@@ -65,9 +65,11 @@ function App() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Inputs */}
-          <CalculatorForm onCalculate={handleCalculate} loading={loading} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Left Column - Inputs (Sticky on desktop) */}
+          <div className="lg:sticky lg:top-8">
+            <CalculatorForm onCalculate={handleCalculate} loading={loading} />
+          </div>
 
           {/* Right Column - Results (Bento Grid) */}
           <div>
