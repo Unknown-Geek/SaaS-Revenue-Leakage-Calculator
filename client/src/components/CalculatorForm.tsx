@@ -45,23 +45,39 @@ const itemVariants = {
 
 export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
     const [mrr, setMrr] = useState<string>('10000')
+    const [mrrError, setMrrError] = useState<string>('')
     const [processor, setProcessor] = useState<string>('stripe')
-    const [internationalPercent, setInternationalPercent] = useState<number>(30)
+    const [internationalPercent, setInternationalPercent] = useState<number>(40)
     const [euPercent, setEuPercent] = useState<number>(20)
-    const [failedPaymentRate, setFailedPaymentRate] = useState<number>(5)
+    const [failedPaymentRate, setFailedPaymentRate] = useState<number>(3)
+
+    // MRR validation helper
+    const validateMrr = (value: number): string => {
+        if (value < 100) {
+            return 'MRR must be at least $100'
+        }
+        if (value > 1000000) {
+            return 'MRR cannot exceed $1,000,000'
+        }
+        return ''
+    }
 
     // Debounced auto-calculate
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            const formData: CalculatorFormData = {
-                mrr: parseFloat(mrr) || 0,
-                processor,
-                international_percent: internationalPercent,
-                eu_percent: euPercent,
-                failed_payment_rate: failedPaymentRate,
-            }
+            const mrrValue = parseFloat(mrr) || 0
+            const error = validateMrr(mrrValue)
+            setMrrError(error)
 
-            if (formData.mrr > 0) {
+            // Only call API if MRR is valid
+            if (!error && mrrValue > 0) {
+                const formData: CalculatorFormData = {
+                    mrr: mrrValue,
+                    processor,
+                    international_percent: internationalPercent,
+                    eu_percent: euPercent,
+                    failed_payment_rate: failedPaymentRate,
+                }
                 onCalculate(formData)
             }
         }, 500)
@@ -70,8 +86,17 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
     }, [mrr, processor, internationalPercent, euPercent, failedPaymentRate, onCalculate])
 
     const handleManualCalculate = useCallback(() => {
+        const mrrValue = parseFloat(mrr) || 0
+        const error = validateMrr(mrrValue)
+        setMrrError(error)
+
+        // Prevent API call if MRR is invalid
+        if (error) {
+            return
+        }
+
         const formData: CalculatorFormData = {
-            mrr: parseFloat(mrr) || 0,
+            mrr: mrrValue,
             processor,
             international_percent: internationalPercent,
             eu_percent: euPercent,
@@ -116,15 +141,20 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
                         <Input
                             id="mrr"
                             type="number"
+                            min={100}
+                            max={1000000}
                             value={mrr}
                             onChange={(e) => setMrr(e.target.value)}
-                            className="pl-8 h-12 bg-slate-50 border-transparent text-slate-900 font-medium rounded-xl 
+                            className={`pl-8 h-12 bg-slate-50 border-transparent text-slate-900 font-medium rounded-xl 
                          transition-all duration-200 
                          focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-transparent
-                         placeholder:text-slate-400"
+                         placeholder:text-slate-400 ${mrrError ? 'ring-2 ring-rose-500/50 border-rose-500' : ''}`}
                             placeholder="10000"
                         />
                     </div>
+                    {mrrError && (
+                        <p className="text-xs text-rose-500 mt-1">{mrrError}</p>
+                    )}
                 </motion.div>
 
                 {/* Processor Select */}
@@ -213,7 +243,7 @@ export function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
                     <Slider
                         value={[failedPaymentRate]}
                         onValueChange={(value) => setFailedPaymentRate(value[0])}
-                        max={20}
+                        max={10}
                         step={0.5}
                         className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:bg-white 
                        [&_[role=slider]]:border-2 [&_[role=slider]]:border-blue-500 

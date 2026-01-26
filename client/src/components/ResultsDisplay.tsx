@@ -112,7 +112,7 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
             animate="visible"
         >
             {/* Bento Grid - Top Metric Cards */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Net Revenue Card */}
                 <motion.div
                     className="bg-white p-6 rounded-2xl shadow-lg shadow-slate-200/50 relative overflow-hidden"
@@ -181,8 +181,23 @@ export function ResultsDisplay({ data, loading, mrr }: ResultsDisplayProps) {
 
                 <button
                     className="w-full bg-[#00A8E8] hover:bg-[#0090C8] text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-200"
+                    onClick={() => {
+                        // Fire tracking event if analytics is available
+                        const win = window as unknown as { gtag?: (event: string, eventName: string, params?: Record<string, string | number>) => void }
+                        if (typeof window !== 'undefined' && win.gtag) {
+                            win.gtag('event', 'cta_clicked', {
+                                mrr_value: mrr,
+                                destination: mrr <= 20000 ? 'signup' : 'demo'
+                            })
+                        }
+
+                        // Smart routing based on MRR
+                        const utmParams = '?utm_source=calculator&utm_medium=tool&utm_campaign=revenue_leak'
+                        const destination = mrr <= 20000 ? '/signup' : '/demo'
+                        window.location.href = destination + utmParams
+                    }}
                 >
-                    Get Started with Paaaid
+                    See How paaaid Fixes This →
                 </button>
             </motion.div>
 
